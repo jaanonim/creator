@@ -29,9 +29,11 @@ def main(language: Optional[Language] = None, path: Optional[Path] = None, name:
         path = get_path(language, path)
         name = get_name(name)
 
-        project_path = LANGUAGES[language.value](path, name)
+        skip_git, project_path = LANGUAGES[language.value](path, name)
 
-        setup_git(project_path)
+        if not skip_git:
+            setup_git(project_path)
+
         open_vscode(project_path)
     except:
         pass

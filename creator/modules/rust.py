@@ -14,4 +14,4 @@ def run(path: Path, name: str):
     f.write(f"# {name}\n")
     f.close()
 
-    return project_path
+    return False, project_path

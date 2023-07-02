@@ -26,4 +26,4 @@ def run(path: Path, name: str):
     f.close()
 
     run_command("Creating env...", "python3", "-m", "venv", "env")
-    return project_path
+    return False, project_path
