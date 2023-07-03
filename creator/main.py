@@ -2,15 +2,14 @@ import enum
 import os
 from pathlib import Path
 from typing import Optional
-import typer
-from rich import print
+
 import questionary
+import typer
+from questionary import ValidationError, Validator, prompt
+from rich import print
 
 from .config import APP_NAME, LANGUAGES
 from .setting import Settings
-
-from questionary import Validator, ValidationError, prompt
-
 from .util import run_command
 
 Language = enum.Enum('Language', dict([
@@ -39,12 +38,12 @@ def main(language: Optional[Language] = None, path: Optional[Path] = None, name:
         pass
 
 
-def setup_git(project_path):
+def setup_git(project_path: Path):
     os.chdir(project_path)
     if questionary.confirm(f"Do you want to setup git repo?").ask():
         run_command("Setting up repo...", "git", "init")
         run_command("Setting up repo...", "git", "config", "--global", "--add", "safe.directory",
-                    project_path.__repr__())
+                    project_path.absolute().as_posix())
         run_command("Setting up repo...", "git", "add", ".")
         run_command("Setting up repo...", "git", "commit", "-m", "Project setup 🚀")
 
