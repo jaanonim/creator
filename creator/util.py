@@ -7,7 +7,7 @@ from rich import print
 err_console = Console(stderr=True)
 
 
-def run_command(description: str, *cmd: [str]):
+def run_command(description: str, *cmd: [str]): # type: ignore
     proc = subprocess.Popen(
         cmd,
         stdout=subprocess.PIPE,

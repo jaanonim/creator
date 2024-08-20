@@ -12,12 +12,23 @@
     poetry2nix,
   }: let
     system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-    inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
+    inherit (poetry2nix.lib.mkPoetry2Nix {inherit pkgs;}) mkPoetryApplication;
   in {
     packages.${system}.default = mkPoetryApplication {
       name = "creator";
       projectDir = ./.;
+
+      buildInputs = with pkgs; [
+        git
+        pnpm
+        python3
+        cargo
+        vscode
+      ];
     };
     devShells.${system} = import ./shell.nix nixpkgs.legacyPackages.${system};
   };
