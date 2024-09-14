@@ -1,18 +1,15 @@
-import os
-from pathlib import Path
-
 import questionary
+from ..runners.default import Default
 
-from ..util import run_command
+
+def run(runner: Default):
+    runner.run_command_interactive(
+        f"pnpm create vite@latest {runner.name}", use_project_path=False)
+
+    if questionary.confirm(f"Do you what to install dependencies?").ask():
+        runner.run_command("Installing dependencies...", "pnpm i")
+
+    return False
 
 
-def run(path: Path, name: str):
-    os.chdir(path)
-    os.system(f"pnpm create vite@latest {name}")
-    project_path = path / name
-    os.chdir(project_path)
-
-    if questionary.confirm(f"To what to install dependencies?").ask():
-        run_command("Installing dependencies...", "pnpm", "i")
-
-    return False, project_path
+DEPS = ["nodejs", "pnpm"]

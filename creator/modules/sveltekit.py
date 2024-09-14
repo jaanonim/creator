@@ -1,18 +1,15 @@
-import os
-from pathlib import Path
-
 import questionary
+from ..runners.default import Default
 
-from ..util import run_command
 
-
-def run(path: Path, name: str):
-    os.chdir(path)
-    os.system(f"pnpm create svelte@latest {name}")
-    project_path = path / name
-    os.chdir(project_path)
+def run(runner: Default):
+    runner.run_command_interactive(
+        f"pnpm create svelte@latest {runner.name}", use_project_path=False)
 
     if questionary.confirm(f"To what to install dependencies?").ask():
-        run_command("Installing dependencies...", "pnpm", "i")
+        runner.run_command("Installing dependencies...", "pnpm i")
 
-    return False, project_path
+    return False
+
+
+DEPS = ["nodejs", "pnpm"]

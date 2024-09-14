@@ -43,3 +43,8 @@ class Settings:
         self.data[name] = value
         with open(self.path, "w") as json_file:
             json.dump(self.data, json_file)
+
+    def reset(self):
+        with open(self.path, "w") as json_file:
+            json.dump({}, json_file)
+        self._init()

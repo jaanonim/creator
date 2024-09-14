@@ -1,11 +1,10 @@
-import os
-from pathlib import Path
+from ..runners.default import Default
 
 
-def run(path: Path, name: str):
-    os.chdir(path)
-    os.system(f"pnpm create astro@latest {name}")
-    project_path = path / name
-    os.chdir(project_path)
+def run(runner: Default):
+    runner.run_command_interactive(
+        f"pnpm create astro@latest {runner.name}", use_project_path=False)
+    return True
 
-    return True, project_path
+
+DEPS = ["nodejs", "pnpm"]

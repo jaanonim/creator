@@ -1,17 +1,13 @@
-import os
-from pathlib import Path
-
-from ..util import run_command
+from ..runners.default import Default
 
 
-def run(path: Path, name: str):
-    project_path = path / name
-    project_path.mkdir(parents=True, exist_ok=True)
-    os.chdir(project_path)
-    run_command("Creating project...", "cargo", "init")
+def run(runner: Default):
+    runner.make_project_dir()
 
-    f = open(project_path / "README.md", "w")
-    f.write(f"# {name}\n")
-    f.close()
+    runner.run_command("Creating project...", "cargo init")
+    runner.make_file("README.md", f"# {runner.name}\n")
 
-    return False, project_path
+    return False
+
+
+DEPS = ["rustc", "cargo", "gcc", "rustfmt", "clippy", "rustup"]
